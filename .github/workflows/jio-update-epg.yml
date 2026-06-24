@@ -40,7 +40,7 @@ jobs:
           JIOTV_PROXY: ${{ secrets.JIOTV_PROXY }}
         run: |
           python3 private-src/jiotv_epg.py \
-            --days 5 \
+            --days 3 \
             --output epg/jiotv_epg.xml \
             --gzip \
             --workers 8
