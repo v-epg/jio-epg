@@ -25,7 +25,7 @@ jobs:
       - name: Checkout Private Repo
         uses: actions/checkout@v4
         with:
-          repository: vgit-push/jiotv
+          repository: vgit-push/jio
           token: ${{ secrets.PRIVATE_REPO_PAT }}
           path: private-src
 
@@ -40,7 +40,7 @@ jobs:
           JIOTV_PROXY: ${{ secrets.JIOTV_PROXY }}
         run: |
           python3 private-src/jiotv_epg.py \
-            --days 2 \
+            --days 5 \
             --output epg/jiotv_epg.xml \
             --gzip \
             --workers 8
