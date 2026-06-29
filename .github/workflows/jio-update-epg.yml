@@ -3,7 +3,7 @@ name: JioTV EPG
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 0 */3 * *"   # Every 3 days
 
 permissions:
   contents: write
@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 200
 
     steps:
       - name: Checkout Public Repo
@@ -40,10 +40,16 @@ jobs:
           JIOTV_PROXY: ${{ secrets.JIOTV_PROXY }}
         run: |
           python3 private-src/jiotv_epg.py \
-            --days 3 \
+            --days 7 \
+            --workers 20 \
             --output epg/jiotv_epg.xml \
-            --gzip \
-            --workers 8
+            --gzip
+
+      - name: Show Stats
+        run: |
+          ls -lh epg/jiotv_epg.xml epg/jiotv_epg.xml.gz
+          echo "Channels   : $(grep -c '<channel' epg/jiotv_epg.xml)"
+          echo "Programmes : $(grep -c '<programme' epg/jiotv_epg.xml)"
 
       - name: Commit and Push
         run: |
